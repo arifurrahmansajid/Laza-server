@@ -101,24 +101,7 @@ async function run() {
         });
 
         // Update a product by id
-        app.put('/product/:id', async (req, res) => {
-          try {
-            const id = req.params.id;
-            const updatedProduct = req.body;
-            const query = { _id: new ObjectId(id) };
-            const updateDoc = {
-              $set: updatedProduct,
-            };
-            const result = await productCollection.updateOne(query, updateDoc);
-            res.send(result);
-          } catch (error) {
-            console.error("Error updating product:", error);
-            res.status(500).send({ message: "Failed to update product." });
-          }
-        });
-      } finally {
-        // You can choose to close the client here if needed.
-      }
+       
     }
     run().catch(console.dir);
 

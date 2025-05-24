@@ -83,3 +83,10 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.get('/', (req, res) => {
+  res.send('Welcome in The plants-server Server')
+});
+
+app.listen(port, () => {
+  console.log(`plants server is running on: ${port}`)
+});

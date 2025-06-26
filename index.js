@@ -30,9 +30,14 @@ async function run() {
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
-    // Get all products
+    // Get all products or filter by owner
     app.get('/product', async (req, res) => {
-      const cursor = productCollection.find();
+      const owner = req.query.owner;
+      let query = {};
+      if (owner) {
+        query.owner = owner;
+      }
+      const cursor = productCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -76,6 +81,17 @@ async function run() {
         console.error("Error updating product:", error);
         res.status(500).send({ message: "Failed to update product." });
       }
+    });
+
+    // Dashboard stats endpoint (optional)
+    app.get('/dashboard-stats', async (req, res) => {
+      const owner = req.query.owner;
+      const totalProducts = await productCollection.countDocuments();
+      let myItems = 0;
+      if (owner) {
+        myItems = await productCollection.countDocuments({ owner });
+      }
+      res.send({ totalProducts, myItems });
     });
   } finally {
     // You can choose to close the client here if needed.
